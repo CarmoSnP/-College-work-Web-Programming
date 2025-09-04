@@ -12,12 +12,24 @@
         <h2 id="bemvindo"></h2>
         <button id="logout">Sair</button>
     </div>
+
     <script>
         const nome = localStorage.getItem("userName");
         const sobrenome = localStorage.getItem("userLastName");
+
         if (nome && sobrenome) {
             document.getElementById("bemvindo").textContent =
                 `Bem-vindo, ${nome} ${sobrenome}! Aqui estão suas informações restritas...`;
         } else {
             window.location.href = "login.html";
         }
+
+        document.getElementById("logout").addEventListener("click", function () {
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userLastName");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+
+</html>

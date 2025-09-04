@@ -25,7 +25,10 @@ const login = (req, res) => {
         return res.status(401).json({ message: "Email ou senha inválidos" });
     }
 
-    res.json({ message: "Login realizado com sucesso!", user });
+    // Remove a senha antes de enviar
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({ message: "Login realizado com sucesso!", ...user });
 };
 
 // Função de registro

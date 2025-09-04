@@ -2,30 +2,22 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Área Restrita</title>
-    <link rel="stylesheet" href="./../src/styles/style.css">
+    <link rel="stylesheet" href="/assets/styles/restricted.css" />
 </head>
 
 <body>
     <div class="login">
         <h2 id="bemvindo"></h2>
-        <a href="/logout">Sair</a>
+        <button id="logout">Sair</button>
     </div>
-
     <script>
-        // Pegando os parâmetros da URL (ex: ?nome=Igor&sobrenome=Carmo)
-        const params = new URLSearchParams(window.location.search);
-        const nome = params.get("nome");
-        const sobrenome = params.get("sobrenome");
-
+        const nome = localStorage.getItem("userName");
+        const sobrenome = localStorage.getItem("userLastName");
         if (nome && sobrenome) {
             document.getElementById("bemvindo").textContent =
                 `Bem-vindo, ${nome} ${sobrenome}! Aqui estão suas informações restritas...`;
         } else {
-            document.getElementById("bemvindo").textContent = "Acesso negado!";
+            window.location.href = "login.html";
         }
-    </script>
-</body>
-
-</html>

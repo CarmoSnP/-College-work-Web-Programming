@@ -54,10 +54,10 @@
                 });
 
                 const data = await response.json();
-
+                console.log("data", data);
                 if (response.ok) {
-                    localStorage.setItem("userName", data.user.name);
-                    localStorage.setItem("userLastName", data.user.userLastName);
+                    localStorage.setItem("userName", data.name);
+                    localStorage.setItem("userLastName", data.userLastName);
                     window.location.href = "restricted.html";
                 } else {
                     alert(data.message || "Erro ao efetuar o login");

@@ -31,14 +31,14 @@ const login = (req, res) => {
 
 // Função de registro
 const register = (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, userLastName, email, password } = req.body;
     const users = readUsers();
 
     if (users.find(u => u.email === email)) {
         return res.status(400).json({ message: "Usuário já cadastrado" });
     }
 
-    users.push({ name, email, password });
+    users.push({ name, userLastName, email, password });
     saveUsers(users);
 
     res.json({ message: "Usuário cadastrado com sucesso!" });

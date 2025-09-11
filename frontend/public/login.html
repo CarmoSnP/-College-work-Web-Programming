@@ -19,6 +19,18 @@
             <h2>Login</h2>
 
             <!-- Adicionamos o form com id "loginForm" -->
+            <script>
+                function getCookie(name) {
+                    const value = "; " + document.cookie;
+                    const parts = value.split("; " + name + "=");
+                    if (parts.length === 2) return parts.pop().split(";").shift();
+                }
+
+                const token = getCookie("auth");
+                if (token) {
+                    window.location.href = "restricted.html";
+                }
+            </script>
             <form id="loginForm">
                 <div class="inputBx">
                     <input type="text" id="email" placeholder="Username" required>
@@ -33,27 +45,36 @@
                     <a href="#">Forget Password</a>
                     <a href="#" id="signup">Cadastrar</a>
                 </div>
+                <div class="inputBx keepLogged">
+                    <label>
+                        <input type="checkbox" id="keepLogged">
+                        <span class="checkmark"></span>
+                        Manter conectado
+                    </label>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- script que vai conectar com o backend -->
     <script>
+
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
-            e.preventDefault(); // evita reload da página
+            e.preventDefault();
 
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const keepLogged = document.getElementById("keepLogged").checked;
 
             try {
-                const response = await fetch("http://localhost:3000/auth/login", { // corrigido http://
+                const response = await fetch("http://localhost:3000/auth/login", {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                    body: JSON.stringify({ email, password })
+                    credentials: "include", // necessário para cookies
+                    body: JSON.stringify({ email, password, keepLogged })
                 });
 
                 const data = await response.json();
-                console.log("data", data);
                 if (response.ok) {
                     localStorage.setItem("userName", data.name);
                     localStorage.setItem("userLastName", data.userLastName);
@@ -65,6 +86,7 @@
                 console.error("Erro: ", err);
             }
         });
+
     </script>
 </body>
 

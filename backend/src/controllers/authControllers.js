@@ -16,7 +16,7 @@ function saveUsers(data) {
 
 // Função de login
 const login = (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, keepLogged } = req.body; // <-- pegar o checkbox
     const users = readUsers();
 
     const user = users.find(u => u.email === email && u.password === password);
@@ -25,6 +25,13 @@ const login = (req, res) => {
         return res.status(401).json({ message: "Email ou senha inválidos" });
     }
 
+    // Criar cookie apenas se marcar "manter conectado"
+    if (keepLogged) {
+        res.cookie("auth", user.id, {
+            httpOnly: true,                      // impede acesso via JS do frontend
+            maxAge: 3 * 24 * 60 * 60 * 1000,     // 3 dias em milissegundos
+        });
+    }
 
     res.json({ message: "Login realizado com sucesso!", ...user });
 };
@@ -44,4 +51,10 @@ const register = (req, res) => {
     res.json({ message: "Usuário cadastrado com sucesso!" });
 };
 
-module.exports = { login, register };
+// Função de logout
+const logout = (req, res) => {
+    res.clearCookie("auth"); // limpa o cookie
+    res.json({ message: "Logout realizado com sucesso!" });
+};
+
+module.exports = { login, register, logout };

@@ -24,10 +24,23 @@
             window.location.href = "login.html";
         }
 
-        document.getElementById("logout").addEventListener("click", function () {
-            localStorage.removeItem("userName");
-            localStorage.removeItem("userLastName");
-            window.location.href = "login.html";
+        document.getElementById("logout").addEventListener("click", async function () {
+            try {
+                const response = await fetch("http://localhost:3000/auth/logout", {
+                    method: "POST",
+                    credentials: "include" // necessário para enviar cookies
+                });
+
+                if (response.ok) {
+                    localStorage.removeItem("userName");
+                    localStorage.removeItem("userLastName");
+                    window.location.href = "login.html";
+                } else {
+                    alert("Erro ao fazer logout");
+                }
+            } catch (err) {
+                console.error(err);
+            }
         });
     </script>
 </body>

@@ -5,12 +5,28 @@
     <meta charset="UTF-8" />
     <title>Área Restrita</title>
     <link rel="stylesheet" href="../src/styles/restricted.css" />
+    <link rel="stylesheet" href="../src/styles/not-logged-message.css" />
 </head>
 
 <body>
     <div class="login">
         <h2 id="bemvindo"></h2>
         <button id="logout">Sair</button>
+    </div>
+
+    <!-- Container para a mensagem de não logado -->
+    <div id="notLoggedContainer" class="not-logged-container">
+        <div class="not-logged-message">
+            <h2>Você não está logado</h2>
+            <p>Você será redirecionado para a página de login em <span id="countdown" class="countdown-number">5</span>
+                segundos.</p>
+            <div class="countdown">
+                <span id="progressBar">
+                    <span id="progressBarInner"></span>
+                </span>
+            </div>
+            <a href="login.html" class="redirect-link">Clique aqui se não quiser esperar</a>
+        </div>
     </div>
 
     <script>
@@ -20,8 +36,33 @@
         if (nome && sobrenome) {
             document.getElementById("bemvindo").textContent =
                 `Bem-vindo, ${nome} ${sobrenome}! Aqui estão suas informações restritas...`;
+            // Esconde a mensagem de não logado
+            document.getElementById('notLoggedContainer').style.display = 'none';
         } else {
-            window.location.href = "login.html";
+            // Exibe a mensagem de não logado
+            const notLoggedContainer = document.getElementById('notLoggedContainer');
+            notLoggedContainer.style.display = 'flex';
+
+            // Inicia o contador para redirecionamento
+            let seconds = 5;
+            const countdownElement = document.getElementById('countdown');
+            const progressBarInner = document.getElementById('progressBarInner');
+
+            // Atualiza a barra de progresso
+            progressBarInner.style.width = '100%';
+
+            const countdownInterval = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = seconds;
+
+                // Atualiza a barra de progresso
+                progressBarInner.style.width = (seconds * 20) + '%';
+
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = "login.html";
+                }
+            }, 1000);
         }
 
         document.getElementById("logout").addEventListener("click", async function () {
